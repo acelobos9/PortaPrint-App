@@ -1,0 +1,51 @@
+
+Changelist for pdf-renderer 0.9.1
+
+CHANGES SINCE 0.9.0
+--------------------------------------------------------------------------
+
+JIRA Issues resolved
+
+ * PDF_RENDERER-130 - Conversion of PDF into an image using pdf-renderer-0.9.0
+       has text that is flipped
+   PDF_RENDERER-91 -  In some PDF documents, the text is rotated
+     
+   Text should no longer be flipped and rotated, and the text hscale 
+   operator will actually be applied properly (thanks Dave Chapman)
+ 
+ * PDF_RENDERER-125 - PDFPage.getImage() throws IIOException on certain 
+       image types
+   
+   All installed JPEG imageio readers are now attempted and there's also 
+   now workaround in place such that YCCK CMYK images can be decoded out 
+   of the box on Oracle JREs without JAI imageio (thanks Ben Day)
+   
+Other fixes/enhancements
+
+ * Use of local TTF Fonts
+ 
+   When a non-embedded TTF font is discovered the named font is searched 
+   for on the local system and employed if found. Previous behaviour was to 
+   immediately substitute a built-in font, which is still done if a local 
+   font is not found. This behaviour can be disabled by setting the system 
+   property PDFRenderer.avoidExternalTtf to true. The 
+   PDFRenderer.fontSearchPath system property can be used to alter the 
+   search path, though Windows and Mac OS X defaults should hopefully be 
+   sensible. 
+   
+ * Built-in font substitution no longer subsitutes italic font when inappropriate
+ 
+ * The system property PDFRenderer.avoidColorConvertOp can be set to true 
+   to avoid use of the native-code using ColorConvertOp which has a few 
+   bugs that might result in SIGSEGVs on various platforms (e.g., Linux; 
+   see https://forums.oracle.com/forums/thread.jspa?threadID=1261882&tstart=225&messageID=5356357 
+   where a SIGSEGV can be experienced in libpthread's pthread_join called by 
+   libcmm). 
+  
+ * PDFDocCharsetEncoder initialisation fix
+ 
+   Fixed bug in class initialisation as reported to dev mailing list 
+   (thanks Carsten Siedentop)
+   
+   
+ 
