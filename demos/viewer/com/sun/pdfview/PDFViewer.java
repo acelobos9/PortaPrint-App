@@ -55,7 +55,9 @@ import java.util.logging.Logger;
 import javax.print.DocPrintJob;
 import javax.print.PrintService;
 import javax.print.attribute.Attribute;
+import javax.print.attribute.HashPrintRequestAttributeSet;
 import javax.print.attribute.PrintRequestAttribute;
+import javax.print.attribute.standard.PageRanges;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.Box;
@@ -779,7 +781,7 @@ public class PDFViewer extends JFrame
             return "Choose a PDF file";
         }
     };
-    private File prevDirChoice = new File("H:/");
+    private File prevDirChoice = new File("E:/");
 
     /**
      * Ask the user for a PDF file to open from the local file system
@@ -804,7 +806,7 @@ public class PDFViewer extends JFrame
     public void doOpen() {
         try {
             final File f;
-            f = new File("H:\\");
+            f = new File("E:\\");
             
             if(!f.exists()){
                 JOptionPane.showMessageDialog(null, "No flashdrive detected");
@@ -910,39 +912,14 @@ public class PDFViewer extends JFrame
      * Print the current document.
      */
     public void doPrint() {
-        JPanel transWindow = new JPanel(new GridBagLayout());
+        
         JLabel msg = new JLabel("Insert coins to print");
-        JLabel tPlabel = new JLabel("Pages to print");
-        final JTextField toPrint = new JTextField();
-        toPrint.getDocument().addDocumentListener(new DocumentListener() {
-
-            @Override
-            public void insertUpdate(DocumentEvent e) {
-               
-            }
-
-            @Override
-            public void removeUpdate(DocumentEvent e) {
-                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-            }
-
-            @Override
-            public void changedUpdate(DocumentEvent e) {
-                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-            }
-            // implement the methods
-        void calculatePrice(){
-            String customPages = toPrint.getText();
-            customPages.replaceAll("\\s", "");
-           //s String[] cPages = customPages.split(",")
-            //int[] cPages = 
-        }
-        });
         JLabel priceLbl = new JLabel("Price");
         JLabel price = new JLabel("Php.");
         PrinterJob pjob = PrinterJob.getPrinterJob();
         pjob.setJobName(docName);
         Book book = new Book();
+        //PDFFile pds = (PDFFile) curFile.getPage(3);
         PDFPrintPage pages = new PDFPrintPage(curFile);
         book.append(pages, pformat, curFile.getNumPages());
         PDFObject ptPrint = null;
@@ -965,10 +942,17 @@ public class PDFViewer extends JFrame
                         break;
                      }
                  }
+                    
                     if (myPrinter != null) {    
                         pjob.setPrintService(myPrinter);
-                        //pjob.print();
-                        
+                        HashPrintRequestAttributeSet printParams = new HashPrintRequestAttributeSet();
+                        if(pjob.printDialog(printParams)){
+                                PageRanges pageRanges = (PageRanges) printParams.get(PageRanges.class);
+                                int pagesToBePrinted = getNumberOfPages(pageRanges);
+                                System.out.println("Printing Cost: "+pagesToBePrinted);
+                                PrintTransaction pTransact = new PrintTransaction();
+                                pTransact.printingPayment(pagesToBePrinted);
+                        }
                         
                         //pjob.print();
                     }else{
@@ -983,10 +967,24 @@ public class PDFViewer extends JFrame
         }
         */
     }
+    
+    int getNumberOfPages(PageRanges pageRanges) {
+    int pages = 0;
+    int[][] ranges = pageRanges.getMembers();
+    for (int i = 0; i < ranges.length; i++) {
+        pages += 1;
+        if (ranges[i].length == 2) {
+            pages += ranges[i][1] - ranges[i][0];
+        }
+    }
+    pages = Math.min(pages, curFile.getNumPages());
+    return pages;
+}
 
     /**
      * Close the current document.
      */
+    
     public void doClose() {
         if (thumbs != null) {
             thumbs.stop();

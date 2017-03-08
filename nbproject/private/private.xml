@@ -4,8 +4,8 @@
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
             <file>file:/E:/THESIS/PortaPrint/demos/viewer/com/sun/pdfview/WhiteListHostNameVerifier.java</file>
-            <file>file:/E:/THESIS/PortaPrint/demos/viewer/com/sun/pdfview/DirectoryRestrictedFileSystemView.java</file>
             <file>file:/E:/THESIS/PortaPrint/src/com/sun/pdfview/action/PDFAction.java</file>
+            <file>file:/E:/THESIS/PortaPrint/demos/viewer/com/sun/pdfview/PrintTransaction.java</file>
             <file>file:/E:/THESIS/PortaPrint/demos/viewer/com/sun/pdfview/PDFPrintPage.java</file>
             <file>file:/E:/THESIS/PortaPrint/demos/viewer/com/sun/pdfview/FileSelector.java</file>
             <file>file:/E:/THESIS/PortaPrint/demos/viewer/com/sun/pdfview/PDFViewer.java</file>
